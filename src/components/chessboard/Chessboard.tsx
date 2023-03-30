@@ -1,4 +1,5 @@
 import React from "react";
+import Tile from "../tile/Tile";
 import './Chessboard.css';
 
 const horizontalAxis = ["a", "b", "c", "d", "e", "f","g", "h"];
@@ -9,12 +10,8 @@ function Chessboard(){
     for(let i=0; i< horizontalAxis.length; i++){
         const number = j + i + 2;
 
-        if(number%2 == 0){
-            board.push(<div className="tile black-tile"></div>)
+        board.push(<Tile number = {number}/>)
 
-        }else{
-            board.push(<div className="tile white-tile"></div>)
-        }
             
         }
     }
