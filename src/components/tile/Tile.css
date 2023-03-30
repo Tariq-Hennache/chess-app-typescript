@@ -1,6 +1,9 @@
 .tile{
     width: 100px;
     height: 100px;
+    display: grid;
+    place-content: center;
+
 }
 
 .black-tile{
@@ -11,4 +14,9 @@
 .white-tile{
     background-color: rgb(224, 185, 185);
 
+}
+
+.tile img{
+    width: 70px;
+    height: 70px;
 }
