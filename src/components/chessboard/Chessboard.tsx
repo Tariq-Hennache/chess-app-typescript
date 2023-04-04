@@ -34,7 +34,7 @@ for( let i =0; i< 8; i++){
     pieces.push({image : 'assets/images/Chess_plt60.png', x:i, y:1})
 }
 
-
+function grabPiece(e: React.MouseEvent<HTMLDivElement, MouseEvent>){}
 
 
 function Chessboard(){
@@ -56,7 +56,7 @@ function Chessboard(){
         }
     }
 
-    return <div id="chessboard">{board}</div>
+    return <div onMouseDown={e => grabPiece(e)} id="chessboard">{board}</div>
 };
 
 export default Chessboard;
