@@ -34,7 +34,24 @@ for( let i =0; i< 8; i++){
     pieces.push({image : 'assets/images/Chess_plt60.png', x:i, y:1})
 }
 
-function grabPiece(e: React.MouseEvent<HTMLDivElement, MouseEvent>){}
+function grabPiece(e: React.MouseEvent){
+    const element = e.target as HTMLElement
+
+    if(element.classList.contains("chess-piece")){
+
+        const x = e.clientX -50;
+        const y = e.clientY -50;
+        element.style.position = "absolute";
+        element.style.left = `${x}px`
+        element.style.top = `${y}px`
+
+
+    }
+}
+
+function movePiece(e : React.MouseEvent){
+
+}
 
 
 function Chessboard(){
@@ -56,7 +73,7 @@ function Chessboard(){
         }
     }
 
-    return <div onMouseDown={e => grabPiece(e)} id="chessboard">{board}</div>
+    return <div onMouseMove={e => movePiece(e)} onMouseDown={e => grabPiece(e)} id="chessboard">{board}</div>
 };
 
 export default Chessboard;
