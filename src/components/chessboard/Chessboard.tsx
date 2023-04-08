@@ -12,38 +12,43 @@ interface Piece {
     x : number;
     y : number; 
 }
+ const initialBoardState: Piece[] = []
 
+ for(let i = 0; i<2; i++){
+    const type = i === 0 ? "d" : "l";
+    const y = i === 0 ? 7 : 0;
 
+    initialBoardState.push({image : `assets/images/Chess_r${type}t60.png`, x:0, y})
+    initialBoardState.push({image : `assets/images/Chess_r${type}t60.png`, x:7, y})
+    initialBoardState.push({image : `assets/images/Chess_n${type}t60.png`, x:1, y})
+    initialBoardState.push({image : `assets/images/Chess_n${type}t60.png`, x:6, y})
+    initialBoardState.push({image : `assets/images/Chess_b${type}t60.png`, x:2, y})
+    initialBoardState.push({image : `assets/images/Chess_b${type}t60.png`, x:5, y})
+    initialBoardState.push({image : `assets/images/Chess_q${type}t60.png`, x:3, y})
+    initialBoardState.push({image : `assets/images/Chess_k${type}t60.png`, x:4, y})
+}
+for( let i =0; i< 8; i++){
+    initialBoardState.push({image : 'assets/images/Chess_pdt60.png', x:i, y:6})
+}
+for( let i =0; i< 8; i++){
+    initialBoardState.push({image : 'assets/images/Chess_plt60.png', x:i, y:1})
+}
 function Chessboard(){
-    const [pieces, setPieces] = useState<Piece[]>([])
+    const [activePiece, setActivePiece] = useState<HTMLElement | null>(null);
+    const [ gridX, setGridX] = useState<number>(0);
+    const [ gridY, setGridY] = useState<number>(0);
+    const [pieces, setPieces] = useState<Piece[]>(initialBoardState)
     const chessboardRef = useRef<HTMLDivElement>(null)
 
-    let activePiece: HTMLElement | null = null;
 
-    useEffect(() => {for(let i = 0; i<2; i++){
-        const type = i === 0 ? "d" : "l";
-        const y = i === 0 ? 7 : 0;
-    
-        pieces.push({image : `assets/images/Chess_r${type}t60.png`, x:0, y})
-        pieces.push({image : `assets/images/Chess_r${type}t60.png`, x:7, y})
-        pieces.push({image : `assets/images/Chess_n${type}t60.png`, x:1, y})
-        pieces.push({image : `assets/images/Chess_n${type}t60.png`, x:6, y})
-        pieces.push({image : `assets/images/Chess_b${type}t60.png`, x:2, y})
-        pieces.push({image : `assets/images/Chess_b${type}t60.png`, x:5, y})
-        pieces.push({image : `assets/images/Chess_q${type}t60.png`, x:3, y})
-        pieces.push({image : `assets/images/Chess_k${type}t60.png`, x:4, y})
-    }
-    for( let i =0; i< 8; i++){
-        pieces.push({image : 'assets/images/Chess_pdt60.png', x:i, y:6})
-    }
-    for( let i =0; i< 8; i++){
-        pieces.push({image : 'assets/images/Chess_plt60.png', x:i, y:1})
-    }}, [])
-
-function grabPiece(e: React.MouseEvent){
+    function grabPiece(e: React.MouseEvent){
     const element = e.target as HTMLElement
+    const chessboard = chessboardRef.current;
 
-    if(element.classList.contains("chess-piece")){
+    if(element.classList.contains("chess-piece") && chessboard){
+
+        setGridX(Math.floor((e.clientX - chessboard.offsetLeft)/100));
+        setGridY(Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800)/100)));
 
         const x = e.clientX -50;
         const y = e.clientY -50;
@@ -51,9 +56,9 @@ function grabPiece(e: React.MouseEvent){
         element.style.left = `${x}px`
         element.style.top = `${y}px`
 
-        activePiece = element
+        setActivePiece(element)
     }
-}
+    }
 
 function movePiece(e : React.MouseEvent){
     const chessboard = chessboardRef.current;
@@ -79,10 +84,24 @@ function movePiece(e : React.MouseEvent){
 }
 
 function dropPiece(e : React.MouseEvent){
-    if(activePiece){
-        activePiece = null
-    }
-}
+    const chessboard = chessboardRef.current;
+    if(activePiece && chessboard){
+        const x = Math.floor((e.clientX - chessboard.offsetLeft)/100);
+        const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800)/100));
+        setPieces(value => {
+            const pieces = value.map((p) => {
+                if(p.x === gridX && p.y === gridY){
+                    p.x = x;
+                    p.y = y;
+                }
+                return p
+            })
+                return pieces 
+            })
+        }
+        setActivePiece(null)
+        }
+    
 
     let board = []
     for(let j=verticalAxis.length -1; j>=0 ; j--){
