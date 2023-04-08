@@ -1,5 +1,5 @@
 import { type } from "os";
-import React from "react";
+import React, { useRef } from "react";
 import Tile from "../tile/Tile";
 import './Chessboard.css';
 
@@ -34,7 +34,15 @@ for( let i =0; i< 8; i++){
     pieces.push({image : 'assets/images/Chess_plt60.png', x:i, y:1})
 }
 
-let activePiece: HTMLElement | null = null;
+
+
+
+
+
+function Chessboard(){
+    const chessboardRef = useRef<HTMLDivElement>(null)
+
+    let activePiece: HTMLElement | null = null;
 
 function grabPiece(e: React.MouseEvent){
     const element = e.target as HTMLElement
@@ -52,13 +60,26 @@ function grabPiece(e: React.MouseEvent){
 }
 
 function movePiece(e : React.MouseEvent){
-    if(activePiece){
+    const chessboard = chessboardRef.current;
+    if(activePiece && chessboard){
+        const minX = chessboard.offsetLeft - 50;
+        const minY = chessboard.offsetTop -50;
 
         const x = e.clientX -50;
         const y = e.clientY -50;
         activePiece.style.position = "absolute";
-        activePiece.style.left = `${x}px`
-        activePiece.style.top = `${y}px`
+        // activePiece.style.left = `${x}px`
+        // activePiece.style.top = `${y}px`
+
+        if(x > minX && x < minX + chessboard.offsetWidth){
+            activePiece.style.left = `${x}px`
+        }
+
+        if(y > minY && y < minY + chessboard.offsetHeight){
+            activePiece.style.top = `${y}px`
+        }
+
+
 
 
     }
@@ -70,8 +91,6 @@ function dropPiece(e : React.MouseEvent){
     }
 }
 
-
-function Chessboard(){
     let board = []
     for(let j=verticalAxis.length -1; j>=0 ; j--){
     for(let i=0; i< horizontalAxis.length; i++){
@@ -90,7 +109,7 @@ function Chessboard(){
         }
     }
 
-    return <div onMouseMove={e => movePiece(e)} onMouseDown={e => grabPiece(e)} onMouseUp={e => dropPiece(e)} id="chessboard">{board}</div>
+    return <div onMouseMove={e => movePiece(e)} onMouseDown={e => grabPiece(e)} onMouseUp={e => dropPiece(e)} id="chessboard" ref={chessboardRef}>{board}</div>
 };
 
 export default Chessboard;
