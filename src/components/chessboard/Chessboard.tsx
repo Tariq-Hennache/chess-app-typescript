@@ -1,8 +1,11 @@
 import { type } from "os";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Tile from "../tile/Tile";
 import './Chessboard.css';
+import Referee from "../../referee/Referee";
+
+
 
 const horizontalAxis = ["a", "b", "c", "d", "e", "f","g", "h"];
 const verticalAxis = [1, 2, 3, 4, 5, 6, 7, 8] ;
@@ -12,6 +15,8 @@ interface Piece {
     x : number;
     y : number; 
 }
+
+// initial board state
  const initialBoardState: Piece[] = []
 
  for(let i = 0; i<2; i++){
@@ -33,18 +38,22 @@ for( let i =0; i< 8; i++){
 for( let i =0; i< 8; i++){
     initialBoardState.push({image : 'assets/images/Chess_plt60.png', x:i, y:1})
 }
+
+
 function Chessboard(){
     const [activePiece, setActivePiece] = useState<HTMLElement | null>(null);
     const [ gridX, setGridX] = useState<number>(0);
     const [ gridY, setGridY] = useState<number>(0);
     const [pieces, setPieces] = useState<Piece[]>(initialBoardState)
     const chessboardRef = useRef<HTMLDivElement>(null)
-
+    const referee = new Referee();
 
     function grabPiece(e: React.MouseEvent){
     const element = e.target as HTMLElement
     const chessboard = chessboardRef.current;
 
+
+    // check if the element is a chess piece and if the chessboard is loaded
     if(element.classList.contains("chess-piece") && chessboard){
 
         setGridX(Math.floor((e.clientX - chessboard.offsetLeft)/100));
@@ -60,9 +69,10 @@ function Chessboard(){
     }
     }
 
-function movePiece(e : React.MouseEvent){
-    const chessboard = chessboardRef.current;
-    if(activePiece && chessboard){
+    // moves the piece around the chessboard
+    function movePiece(e : React.MouseEvent){
+     const chessboard = chessboardRef.current;
+     if(activePiece && chessboard){
         const minX = chessboard.offsetLeft - 35;
         const minY = chessboard.offsetTop -35;
 
@@ -83,11 +93,17 @@ function movePiece(e : React.MouseEvent){
     }
 }
 
+
+// drops the piece on the chessboard
 function dropPiece(e : React.MouseEvent){
     const chessboard = chessboardRef.current;
     if(activePiece && chessboard){
         const x = Math.floor((e.clientX - chessboard.offsetLeft)/100);
         const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800)/100));
+
+
+
+        // updates the piece position
         setPieces(value => {
             const pieces = value.map((p) => {
                 if(p.x === gridX && p.y === gridY){
@@ -108,7 +124,8 @@ function dropPiece(e : React.MouseEvent){
     for(let i=0; i< horizontalAxis.length; i++){
         const number = j + i + 2;
         let image = undefined;
-
+        
+        // check if there is a piece on the tile
         pieces.forEach(p => {
             if(p.x === i && p.y === j){
                 image = p.image;
