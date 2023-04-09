@@ -13,30 +13,49 @@ const verticalAxis = [1, 2, 3, 4, 5, 6, 7, 8] ;
 interface Piece {
     image : string;
     x : number;
-    y : number; 
+    y : number;
+    type : PieceType; 
+    team: Team;
 }
+
+export enum PieceType {
+    PAWN,
+    ROOK,
+    KNIGHT,
+    BISHOP,
+    QUEEN,
+    KING
+}
+
+export enum Team {
+    WHITE,
+    BLACK
+}
+
+
 
 // initial board state
  const initialBoardState: Piece[] = []
 
  for(let i = 0; i<2; i++){
-    const type = i === 0 ? "d" : "l";
-    const y = i === 0 ? 7 : 0;
+    const teamType = i === 0 ? Team.BLACK : Team.WHITE;
+    const type = (teamType === Team.BLACK) ? "d" : "l";
+    const y = (teamType === Team.BLACK) ? 7 : 0;
 
-    initialBoardState.push({image : `assets/images/Chess_r${type}t60.png`, x:0, y})
-    initialBoardState.push({image : `assets/images/Chess_r${type}t60.png`, x:7, y})
-    initialBoardState.push({image : `assets/images/Chess_n${type}t60.png`, x:1, y})
-    initialBoardState.push({image : `assets/images/Chess_n${type}t60.png`, x:6, y})
-    initialBoardState.push({image : `assets/images/Chess_b${type}t60.png`, x:2, y})
-    initialBoardState.push({image : `assets/images/Chess_b${type}t60.png`, x:5, y})
-    initialBoardState.push({image : `assets/images/Chess_q${type}t60.png`, x:3, y})
-    initialBoardState.push({image : `assets/images/Chess_k${type}t60.png`, x:4, y})
+    initialBoardState.push({image : `assets/images/Chess_r${type}t60.png`, x:0, y, type: PieceType.ROOK, team: teamType})
+    initialBoardState.push({image : `assets/images/Chess_r${type}t60.png`, x:7, y, type: PieceType.ROOK, team: teamType})
+    initialBoardState.push({image : `assets/images/Chess_n${type}t60.png`, x:1, y, type: PieceType.KNIGHT, team: teamType})
+    initialBoardState.push({image : `assets/images/Chess_n${type}t60.png`, x:6, y, type: PieceType.KNIGHT, team: teamType})
+    initialBoardState.push({image : `assets/images/Chess_b${type}t60.png`, x:2, y, type: PieceType.BISHOP,  team: teamType})
+    initialBoardState.push({image : `assets/images/Chess_b${type}t60.png`, x:5, y, type: PieceType.BISHOP, team: teamType})
+    initialBoardState.push({image : `assets/images/Chess_q${type}t60.png`, x:3, y, type: PieceType.QUEEN, team: teamType})
+    initialBoardState.push({image : `assets/images/Chess_k${type}t60.png`, x:4, y, type: PieceType.KING, team: teamType})
 }
 for( let i =0; i< 8; i++){
-    initialBoardState.push({image : 'assets/images/Chess_pdt60.png', x:i, y:6})
+    initialBoardState.push({image : 'assets/images/Chess_pdt60.png', x:i, y:6, type: PieceType.PAWN, team: Team.BLACK})
 }
 for( let i =0; i< 8; i++){
-    initialBoardState.push({image : 'assets/images/Chess_plt60.png', x:i, y:1})
+    initialBoardState.push({image : 'assets/images/Chess_plt60.png', x:i, y:1, type: PieceType.PAWN, team: Team.WHITE})
 }
 
 
@@ -101,14 +120,22 @@ function dropPiece(e : React.MouseEvent){
         const x = Math.floor((e.clientX - chessboard.offsetLeft)/100);
         const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800)/100));
 
-
+        // check if the piece is dropped on a valid tile
 
         // updates the piece position
         setPieces(value => {
             const pieces = value.map((p) => {
                 if(p.x === gridX && p.y === gridY){
+                    const validMove = referee.isValidMove(gridX, gridY, x, y, p.type, p.team,)
+                    if(validMove){
+
                     p.x = x;
                     p.y = y;
+                    }else{
+                        activePiece.style.position = "relative";
+                        activePiece.style.removeProperty("top");
+                        activePiece.style.removeProperty("left");
+                    }
                 }
                 return p
             })
