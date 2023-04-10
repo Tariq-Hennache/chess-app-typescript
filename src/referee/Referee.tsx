@@ -17,52 +17,23 @@ class Referee{
         console.log("isValidMove")
         console.log(px, py, x, y, type, team)
         if(type === PieceType.PAWN){
-            if(team === Team.WHITE){
-                if(py === 1 && x === px){
-                    if(y === py + 1){
-                        if(!this.isTileOccupied(x, y, boardState)){
-                            return true;
-                        }
-                    }else if(y === py + 2){
-                        if(!this.isTileOccupied(x, y, boardState) && !this.isTileOccupied(x, y - 1, boardState)){
-                            return true;
-                        }
-    
-    
-                    }
-                }else{
-                    if(y === py + 1 && x === px){
-                     if(!this.isTileOccupied(x, y, boardState)){
-                         return true;
-                     }
-                    }
-                 }
-            } else {
-                if(team === Team.BLACK){
-                if(py === 6 && x === px){
-                    if(y === py - 1 ){
-                        if(!this.isTileOccupied(x, y, boardState)){
-                            return true;
-                        }
-                    }else if(y === py - 2){
-                        if(!this.isTileOccupied(x, y, boardState) && !this.isTileOccupied(x, y + 1, boardState)){
-                            return true;
-                        }
-                    }
-                    
-                }else{
-                   if(y === py - 1 && x === px){
-                        if(!this.isTileOccupied(x, y, boardState)){
-                       return true;
-                        }
-                   }
+            const startRow = team === Team.WHITE ? 1 : 6;
+            const direction = team === Team.WHITE ? 1 : -1;
+            if(py === startRow && x === px && y - py === direction * 2){
+                if(!this.isTileOccupied(x, y, boardState) && !this.isTileOccupied(x, y - direction, boardState)){
+                    return true;
+                }
+            }else if(y - py === direction && x === px){
+                if(!this.isTileOccupied(x, y, boardState)){
+                    return true;
                 }
             }
+        }
 
-            }
+        
             
 
-        }
+    
 
         return false;
     }
