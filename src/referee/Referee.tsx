@@ -1,7 +1,19 @@
-import { PieceType, Team } from "../components/chessboard/Chessboard";
+import { PieceType, Team, Piece } from "../components/chessboard/Chessboard";
 
 class Referee{
-    isValidMove(px:number, py:number, x:number, y:number, type:PieceType, team:Team){
+
+    isTileOccupied(x:number, y:number, boardState : Piece[]):boolean{
+
+        const piece = boardState.find((piece) => piece.x === x && piece.y === y);
+        if(piece){
+            return true;
+        }else{
+            return false;
+        }
+
+
+    }
+    isValidMove(px:number, py:number, x:number, y:number, type:PieceType, team:Team, boardState:Piece[]){
         console.log("isValidMove")
         console.log(px, py, x, y, type, team)
         if(type === PieceType.PAWN){
@@ -16,6 +28,24 @@ class Referee{
                        return true;
                    }
                 }
+            } else {
+                if(team === Team.BLACK){
+                if(py === 6 && x === px){
+                    if(y === py - 1 || y === py - 2){
+                        if(!this.isTileOccupied(x, y, boardState)){
+                            return true;
+                        }
+                    }
+                    
+                }else{
+                   if(y === py - 1 && x === px){
+                        if(!this.isTileOccupied(x, y, boardState)){
+                       return true;
+                        }
+                   }
+                }
+            }
+
             }
             
 
