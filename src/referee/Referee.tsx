@@ -19,20 +19,33 @@ class Referee{
         if(type === PieceType.PAWN){
             if(team === Team.WHITE){
                 if(py === 1 && x === px){
-                    if(y === py + 1 || y === py + 2){
-                        return true;
+                    if(y === py + 1){
+                        if(!this.isTileOccupied(x, y, boardState)){
+                            return true;
+                        }
+                    }else if(y === py + 2){
+                        if(!this.isTileOccupied(x, y, boardState) && !this.isTileOccupied(x, y - 1, boardState)){
+                            return true;
+                        }
+    
+    
                     }
-                    
                 }else{
-                   if(y === py + 1 && x === px){
-                       return true;
-                   }
-                }
+                    if(y === py + 1 && x === px){
+                     if(!this.isTileOccupied(x, y, boardState)){
+                         return true;
+                     }
+                    }
+                 }
             } else {
                 if(team === Team.BLACK){
                 if(py === 6 && x === px){
-                    if(y === py - 1 || y === py - 2){
+                    if(y === py - 1 ){
                         if(!this.isTileOccupied(x, y, boardState)){
+                            return true;
+                        }
+                    }else if(y === py - 2){
+                        if(!this.isTileOccupied(x, y, boardState) && !this.isTileOccupied(x, y + 1, boardState)){
                             return true;
                         }
                     }
