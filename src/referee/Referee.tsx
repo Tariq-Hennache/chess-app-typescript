@@ -13,6 +13,16 @@ class Referee{
 
 
     }
+
+    tileHasEnemyPiece(x:number, y:number, team:Team, boardState:Piece[]):boolean{
+        const piece = boardState.find((piece) => piece.x === x && piece.y === y);
+        if(piece && piece.team !== team){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     isValidMove(px:number, py:number, x:number, y:number, type:PieceType, team:Team, boardState:Piece[]){
         console.log("isValidMove")
         console.log(px, py, x, y, type, team)
@@ -28,7 +38,17 @@ class Referee{
                     return true;
                 }
             }
-        }
+
+            else if(y - py === direction && Math.abs(x - px) === 1){
+                if(this.isTileOccupied(x, y, boardState)){
+                    return true;
+                }
+            }else if( y - py === direction && Math.abs(x - px) === 1){
+                if(this.tileHasEnemyPiece(x, y, team, boardState)){
+                    return true;
+                }
+            }
+         }
 
         
             
