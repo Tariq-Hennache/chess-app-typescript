@@ -120,30 +120,38 @@ function dropPiece(e : React.MouseEvent){
         const x = Math.floor((e.clientX - chessboard.offsetLeft)/100);
         const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800)/100));
 
-        // check if the piece is dropped on a valid tile
-
-        // updates the piece position
-        setPieces(value => {
-            const pieces = value.map((p) => {
-                if(p.x === gridX && p.y === gridY){
-                    const validMove = referee.isValidMove(gridX, gridY, x, y, p.type, p.team, value)
-                    if(validMove){
-
-                    p.x = x;
-                    p.y = y;
-                    }else{
-                        activePiece.style.position = "relative";
-                        activePiece.style.removeProperty("top");
-                        activePiece.style.removeProperty("left");
-                    }
+        const currentPiece = pieces.find((p) => p.x === gridX && p.y === gridY)
+        const attackedPiece = pieces.find((p) => p.x === x && p.y === y)
+        console.log(currentPiece + "current piece")
+        if(currentPiece){
+            const validMove = referee.isValidMove(gridX, gridY, x, y, currentPiece.type, currentPiece.team, pieces)
+            if(validMove){
+                //updates peices position
+           setPieces ((value) => {
+            const pieces = value.reduce((results, piece) => {
+                if(piece.x === currentPiece.x && piece.y === currentPiece.y){
+                    piece.x = x;
+                    piece.y = y;
+                    results.push(piece)
+                }else if(!(piece.x === x && piece.y === y)){
+                    results.push(piece)
                 }
-                return p
-            })
-                return pieces 
-            })
+                results.push(piece)
+                return results
+            }, [] as Piece[]);
+            return pieces
+        })
+        }else{
+            activePiece.style.position = "relative";
+            activePiece.style.removeProperty("top");
+            activePiece.style.removeProperty("left");
+
+        }
+                 
         }
         setActivePiece(null)
         }
+    }
     
 
     let board = []
@@ -169,3 +177,5 @@ function dropPiece(e : React.MouseEvent){
 };
 
 export default Chessboard;
+
+

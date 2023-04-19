@@ -23,6 +23,9 @@ class Referee{
         }
     }
 
+
+    
+
     isValidMove(px:number, py:number, x:number, y:number, type:PieceType, team:Team, boardState:Piece[]){
         console.log("isValidMove")
         console.log(px, py, x, y, type, team)
