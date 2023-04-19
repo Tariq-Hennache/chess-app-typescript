@@ -121,26 +121,25 @@ function dropPiece(e : React.MouseEvent){
         const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800)/100));
 
         const currentPiece = pieces.find((p) => p.x === gridX && p.y === gridY)
-        const attackedPiece = pieces.find((p) => p.x === x && p.y === y)
+        //const attackedPiece = pieces.find((p) => p.x === x && p.y === y)
         console.log(currentPiece + "current piece")
         if(currentPiece){
             const validMove = referee.isValidMove(gridX, gridY, x, y, currentPiece.type, currentPiece.team, pieces)
             if(validMove){
                 //updates peices position
-           setPieces ((value) => {
-            const pieces = value.reduce((results, piece) => {
-                if(piece.x === currentPiece.x && piece.y === currentPiece.y){
-                    piece.x = x;
-                    piece.y = y;
-                    results.push(piece)
-                }else if(!(piece.x === x && piece.y === y)){
-                    results.push(piece)
-                }
-                results.push(piece)
-                return results
-            }, [] as Piece[]);
-            return pieces
-        })
+
+                const Updatedpieces = pieces.reduce((results, piece) => {
+                    if(piece.x === currentPiece.x && piece.y === currentPiece.y){
+                        piece.x = x;
+                        piece.y = y;
+                        results.push(piece)
+                    }else if(!(piece.x === x && piece.y === y)){
+                        results.push(piece)
+                    }
+                    return results
+                }, [] as Piece[]);
+                setPieces(Updatedpieces)
+            
         }else{
             activePiece.style.position = "relative";
             activePiece.style.removeProperty("top");
@@ -168,6 +167,7 @@ function dropPiece(e : React.MouseEvent){
         })
 
         board.push(<Tile key={`${j},${i}`} image ={image} number = {number}/>)
+
 
             
         }
