@@ -131,12 +131,32 @@ function dropPiece(e : React.MouseEvent){
 
             const isEnPassant = referee.isEnPassant(gridX, gridY, x, y, pieces, currentPiece.team, currentPiece.type)
 
-            if(validMove){
+            const direction = currentPiece.team === Team.WHITE ? 1 : -1;
+
+            if(isEnPassant){
+                const Updatedpieces = pieces.reduce((results, piece) => {
+                    if(piece.x === gridX && piece.y === gridY){
+                        piece.enPassant = false;
+                        piece.x = x;
+                        piece.y = y;
+                        results.push(piece)
+                    }else if(!(piece.x === x && piece.y === y - direction)){
+                        if(piece.type === PieceType.PAWN){
+                            piece.enPassant = false;
+                        }
+                        results.push(piece)
+                    }
+                    return results
+                }, [] as Piece[]);
+                setPieces(Updatedpieces)
+            }else if(validMove){
                 //updates peices position
                 const Updatedpieces = pieces.reduce((results, piece) => {
                     if(piece.x === gridX && piece.y === gridY){
                         if(Math.abs(gridY - y) === 2 && currentPiece.type === PieceType.PAWN){
                             piece.enPassant = true;
+                        }else{
+                            piece.enPassant = false;
                         }
                         piece.x = x;
                         piece.y = y;

@@ -28,7 +28,10 @@ class Referee{
 
         if(type === PieceType.PAWN){ 
             if(y - py === direction && Math.abs(x - px) === 1){
-                const piece = boardState.find((piece) => piece.x === x && piece.y === y - direction);
+                const piece = boardState.find((piece) => piece.x === x && piece.y === y - direction && piece.enPassant);
+                if(piece){
+                    return true;
+                }
             
         }
             
