@@ -23,6 +23,19 @@ class Referee{
         }
     }
 
+    isEnPassant(px:number, py:number, x:number, y:number, boardState:Piece[], team: Team, type:PieceType){
+        const direction = team === Team.WHITE ? 1 : -1;
+
+        if(type === PieceType.PAWN){ 
+            if(y - py === direction && Math.abs(x - px) === 1){
+                const piece = boardState.find((piece) => piece.x === x && piece.y === y - direction);
+            
+        }
+            
+        }
+        return false;
+
+    }
 
     
 
@@ -46,7 +59,7 @@ class Referee{
                 if(this.isTileOccupied(x, y, boardState)){
                     return true;
                 }
-            }else if( y - py === direction && Math.abs(x - px) === 1){
+            }else if(y - py === direction && Math.abs(x - px) === 1){
                 if(this.tileHasEnemyPiece(x, y, team, boardState)){
                     return true;
                 }

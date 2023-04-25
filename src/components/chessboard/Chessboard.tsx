@@ -16,6 +16,7 @@ const verticalAxis = [1, 2, 3, 4, 5, 6, 7, 8] ;
     y : number;
     type : PieceType; 
     team: Team;
+    enPassant?: boolean;
 }
 
 export enum PieceType {
@@ -113,6 +114,8 @@ function Chessboard(){
 }
 
 
+
+
 // drops the piece on the chessboard
 function dropPiece(e : React.MouseEvent){
     const chessboard = chessboardRef.current;
@@ -125,15 +128,23 @@ function dropPiece(e : React.MouseEvent){
         console.log(currentPiece + "current piece")
         if(currentPiece){
             const validMove = referee.isValidMove(gridX, gridY, x, y, currentPiece.type, currentPiece.team, pieces)
+
+            const isEnPassant = referee.isEnPassant(gridX, gridY, x, y, pieces, currentPiece.team, currentPiece.type)
+
             if(validMove){
                 //updates peices position
-
                 const Updatedpieces = pieces.reduce((results, piece) => {
                     if(piece.x === gridX && piece.y === gridY){
+                        if(Math.abs(gridY - y) === 2 && currentPiece.type === PieceType.PAWN){
+                            piece.enPassant = true;
+                        }
                         piece.x = x;
                         piece.y = y;
                         results.push(piece)
                     }else if(!(piece.x === x && piece.y === y)){
+                        if(piece.type === PieceType.PAWN){
+                            piece.enPassant = false;
+                        }
                         results.push(piece)
                     }
                     return results
