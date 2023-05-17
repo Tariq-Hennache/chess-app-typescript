@@ -4,34 +4,9 @@ import React, { useRef, useState } from "react";
 import Tile from "../tile/Tile";
 import './Chessboard.css';
 import Referee from "../../referee/Referee";
-import { horizontalAxis, verticalAxis, Piece, PieceType, Team } from "../../Constants";
+import { horizontalAxis, verticalAxis, Piece, PieceType, Team, initialBoardState} from "../../Constants";
 
 
-
-
-// initial board state
- const initialBoardState: Piece[] = []
-
- for(let i = 0; i<2; i++){
-    const teamType = i === 0 ? Team.BLACK : Team.WHITE;
-    const type = (teamType === Team.BLACK) ? "d" : "l";
-    const y = (teamType === Team.BLACK) ? 7 : 0;
-
-    initialBoardState.push({image : `assets/images/Chess_r${type}t60.png`, x:0, y, type: PieceType.ROOK, team: teamType})
-    initialBoardState.push({image : `assets/images/Chess_r${type}t60.png`, x:7, y, type: PieceType.ROOK, team: teamType})
-    initialBoardState.push({image : `assets/images/Chess_n${type}t60.png`, x:1, y, type: PieceType.KNIGHT, team: teamType})
-    initialBoardState.push({image : `assets/images/Chess_n${type}t60.png`, x:6, y, type: PieceType.KNIGHT, team: teamType})
-    initialBoardState.push({image : `assets/images/Chess_b${type}t60.png`, x:2, y, type: PieceType.BISHOP,  team: teamType})
-    initialBoardState.push({image : `assets/images/Chess_b${type}t60.png`, x:5, y, type: PieceType.BISHOP, team: teamType})
-    initialBoardState.push({image : `assets/images/Chess_q${type}t60.png`, x:3, y, type: PieceType.QUEEN, team: teamType})
-    initialBoardState.push({image : `assets/images/Chess_k${type}t60.png`, x:4, y, type: PieceType.KING, team: teamType})
-}
-for( let i =0; i< 8; i++){
-    initialBoardState.push({image : 'assets/images/Chess_pdt60.png', x:i, y:6, type: PieceType.PAWN, team: Team.BLACK})
-}
-for( let i =0; i< 8; i++){
-    initialBoardState.push({image : 'assets/images/Chess_plt60.png', x:i, y:1, type: PieceType.PAWN, team: Team.WHITE})
-}
 
 
 function Chessboard(){

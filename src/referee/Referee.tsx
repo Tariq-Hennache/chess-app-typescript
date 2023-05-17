@@ -1,4 +1,4 @@
-import { PieceType, Team, Piece } from "../components/chessboard/Chessboard";
+import { PieceType, Team, Piece } from "../Constants";
 
 class Referee{
 
