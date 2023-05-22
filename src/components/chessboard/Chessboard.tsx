@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import Tile from "../tile/Tile";
 import './Chessboard.css';
 import Referee from "../../referee/Referee";
-import { horizontalAxis, verticalAxis, Piece, PieceType, Team, initialBoardState, Postition} from "../../Constants";
+import { horizontalAxis, verticalAxis,squareSize, Piece, PieceType, Team, initialBoardState, Postition} from "../../Constants";
 
 
 
@@ -23,9 +23,9 @@ function Chessboard(){
 
     // check if the element is a chess piece and if the chessboard is loaded
     if(element.classList.contains("chess-piece") && chessboard){
-        setActivePiecePosition({x: Math.floor((e.clientX - chessboard.offsetLeft)/100), y: Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800)/100))})
-        const x = e.clientX -50;
-        const y = e.clientY -50;
+        setActivePiecePosition({x: Math.floor((e.clientX - chessboard.offsetLeft)/squareSize), y: Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800)/squareSize))})
+        const x = e.clientX - squareSize/2;
+        const y = e.clientY - squareSize/2;
         element.style.position = "absolute";
         element.style.left = `${x}px`
         element.style.top = `${y}px`
@@ -65,11 +65,10 @@ function Chessboard(){
 function dropPiece(e : React.MouseEvent){
     const chessboard = chessboardRef.current;
     if(activePiece && chessboard){
-        const x = Math.floor((e.clientX - chessboard.offsetLeft)/100);
-        const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800)/100));
+        const x = Math.floor((e.clientX - chessboard.offsetLeft)/squareSize);
+        const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800)/squareSize));
 
         const currentPiece = pieces.find((p) => p.position.x === activePiecePosition.x && p.position.y === activePiecePosition.y)
-        //const attackedPiece = pieces.find((p) => p.x === x && p.y === y)
         console.log(currentPiece + "current piece")
         if(currentPiece){
             const validMove = referee.isValidMove(activePiecePosition.x, activePiecePosition.y, x, y, currentPiece.type, currentPiece.team, pieces)
@@ -133,17 +132,13 @@ function dropPiece(e : React.MouseEvent){
     for(let j=verticalAxis.length -1; j>=0 ; j--){
     for(let i=0; i< horizontalAxis.length; i++){
         const number = j + i + 2;
-        let image = undefined;
-        
         // check if there is a piece on the tile
-        pieces.forEach(p => {
-            if(p.position.x === i && p.position.y === j){
-                image = p.image;
-            }
-        })
+        const piece = pieces.find((p) => p.position.x === i && p.position.y === j)
+        let image = piece ? piece.image : undefined;
+        
+        
 
         board.push(<Tile key={`${j},${i}`} image ={image} number = {number}/>)
-
 
             
         }
@@ -153,5 +148,3 @@ function dropPiece(e : React.MouseEvent){
 };
 
 export default Chessboard;
-
-

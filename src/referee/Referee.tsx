@@ -43,8 +43,6 @@ class Referee{
     
 
     isValidMove(px:number, py:number, x:number, y:number, type:PieceType, team:Team, boardState:Piece[]){
-        console.log("isValidMove")
-        console.log(px, py, x, y, type, team)
         if(type === PieceType.PAWN){
             const startRow = team === Team.WHITE ? 1 : 6;
             const direction = team === Team.WHITE ? 1 : -1;
@@ -67,7 +65,17 @@ class Referee{
                     return true;
                 }
             }
-         }
+         } else if(type === PieceType.KNIGHT){
+            if((Math.abs(x - px) === 2 && Math.abs(y - py) === 1) || (Math.abs(x - px) === 1 && Math.abs(y - py) === 2)){
+                if(!this.isTileOccupied(x, y, boardState)){
+                    return true;
+                }else if(this.tileHasEnemyPiece(x, y, team, boardState)){
+                    return true;
+                }
+                    console.log("knight")
+                }
+            }
+        
 
         
             
