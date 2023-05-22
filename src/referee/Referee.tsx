@@ -4,7 +4,7 @@ class Referee{
 
     isTileOccupied(x:number, y:number, boardState : Piece[]):boolean{
 
-        const piece = boardState.find((piece) => piece.x === x && piece.y === y);
+        const piece = boardState.find((piece) => piece.position.x === x && piece.position.y === y);
         if(piece){
             return true;
         }else{
@@ -15,7 +15,7 @@ class Referee{
     }
 
     tileHasEnemyPiece(x:number, y:number, team:Team, boardState:Piece[]):boolean{
-        const piece = boardState.find((piece) => piece.x === x && piece.y === y);
+        const piece = boardState.find((piece) => piece.position.x === x && piece.position.y === y);
         if(piece && piece.team !== team){
             return true;
         }else{
@@ -28,7 +28,7 @@ class Referee{
 
         if(type === PieceType.PAWN){ 
             if(y - py === direction && Math.abs(x - px) === 1){
-                const piece = boardState.find((piece) => piece.x === x && piece.y === y - direction && piece.enPassant);
+                const piece = boardState.find((piece) => piece.position.x === x && piece.position.y === y - direction && piece.enPassant);
                 if(piece){
                     return true;
                 }

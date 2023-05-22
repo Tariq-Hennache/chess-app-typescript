@@ -4,15 +4,14 @@ import React, { useRef, useState } from "react";
 import Tile from "../tile/Tile";
 import './Chessboard.css';
 import Referee from "../../referee/Referee";
-import { horizontalAxis, verticalAxis, Piece, PieceType, Team, initialBoardState} from "../../Constants";
+import { horizontalAxis, verticalAxis, Piece, PieceType, Team, initialBoardState, Postition} from "../../Constants";
 
 
 
 
 function Chessboard(){
     const [activePiece, setActivePiece] = useState<HTMLElement | null>(null);
-    const [ gridX, setGridX] = useState<number>(0);
-    const [ gridY, setGridY] = useState<number>(0);
+    const [activePiecePosition, setActivePiecePosition] = useState<Postition>({x:0, y:0});
     const [pieces, setPieces] = useState<Piece[]>(initialBoardState)
     const chessboardRef = useRef<HTMLDivElement>(null)
     const referee = new Referee();
@@ -24,10 +23,7 @@ function Chessboard(){
 
     // check if the element is a chess piece and if the chessboard is loaded
     if(element.classList.contains("chess-piece") && chessboard){
-
-        setGridX(Math.floor((e.clientX - chessboard.offsetLeft)/100));
-        setGridY(Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800)/100)));
-
+        setActivePiecePosition({x: Math.floor((e.clientX - chessboard.offsetLeft)/100), y: Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800)/100))})
         const x = e.clientX -50;
         const y = e.clientY -50;
         element.style.position = "absolute";
@@ -72,24 +68,24 @@ function dropPiece(e : React.MouseEvent){
         const x = Math.floor((e.clientX - chessboard.offsetLeft)/100);
         const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800)/100));
 
-        const currentPiece = pieces.find((p) => p.x === gridX && p.y === gridY)
+        const currentPiece = pieces.find((p) => p.position.x === activePiecePosition.x && p.position.y === activePiecePosition.y)
         //const attackedPiece = pieces.find((p) => p.x === x && p.y === y)
         console.log(currentPiece + "current piece")
         if(currentPiece){
-            const validMove = referee.isValidMove(gridX, gridY, x, y, currentPiece.type, currentPiece.team, pieces)
+            const validMove = referee.isValidMove(activePiecePosition.x, activePiecePosition.y, x, y, currentPiece.type, currentPiece.team, pieces)
 
-            const isEnPassant = referee.isEnPassant(gridX, gridY, x, y, pieces, currentPiece.team, currentPiece.type)
+            const isEnPassant = referee.isEnPassant(activePiecePosition.x, activePiecePosition.y, x, y, pieces, currentPiece.team, currentPiece.type)
 
             const direction = currentPiece.team === Team.WHITE ? 1 : -1;
 
             if(isEnPassant){
                 const Updatedpieces = pieces.reduce((results, piece) => {
-                    if(piece.x === gridX && piece.y === gridY){
+                    if(piece.position.x === activePiecePosition.x && piece.position.y === activePiecePosition.y){
                         piece.enPassant = false;
-                        piece.x = x;
-                        piece.y = y;
+                        piece.position.x = x;
+                        piece.position.y = y;
                         results.push(piece)
-                    }else if(!(piece.x === x && piece.y === y - direction)){
+                    }else if(!(piece.position.x === x && piece.position.y === y - direction)){
                         if(piece.type === PieceType.PAWN){
                             piece.enPassant = false;
                         }
@@ -101,16 +97,16 @@ function dropPiece(e : React.MouseEvent){
             }else if(validMove){
                 //updates peices position
                 const Updatedpieces = pieces.reduce((results, piece) => {
-                    if(piece.x === gridX && piece.y === gridY){
-                        if(Math.abs(gridY - y) === 2 && currentPiece.type === PieceType.PAWN){
+                    if(piece.position.x === activePiecePosition.x && piece.position.y === activePiecePosition.y){
+                        if(Math.abs(activePiecePosition.y - y) === 2 && currentPiece.type === PieceType.PAWN){
                             piece.enPassant = true;
                         }else{
                             piece.enPassant = false;
                         }
-                        piece.x = x;
-                        piece.y = y;
+                        piece.position.x = x;
+                        piece.position.y = y;
                         results.push(piece)
-                    }else if(!(piece.x === x && piece.y === y)){
+                    }else if(!(piece.position.x === x && piece.position.y === y)){
                         if(piece.type === PieceType.PAWN){
                             piece.enPassant = false;
                         }
@@ -141,7 +137,7 @@ function dropPiece(e : React.MouseEvent){
         
         // check if there is a piece on the tile
         pieces.forEach(p => {
-            if(p.x === i && p.y === j){
+            if(p.position.x === i && p.position.y === j){
                 image = p.image;
             }
         })
