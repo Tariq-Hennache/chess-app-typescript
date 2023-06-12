@@ -1,5 +1,8 @@
 import { PieceType, Team, Piece } from "../Constants";
 
+//px and py are the initial x and y coordinates of the piece
+// x and y are the final x and y coordinates of the piece
+
 class Referee{
 
     isTileOccupied(x:number, y:number, boardState : Piece[]):boolean{
@@ -160,6 +163,51 @@ class Referee{
 
             else if(type === PieceType.BISHOP){
                 if(Math.abs(x - px) === Math.abs(y - py)){
+                    // checks move to top right
+                    if(x - px > 0 && y - py > 0){
+                        let x1 = px + 1;
+                        let y1 = py + 1;
+                        while(x1 !== x && y1 !== y){
+                            if(this.isTileOccupied(x1, y1, boardState)){
+                                return false;
+                            }
+                            x1++;
+                            y1++;
+                        }
+                    // checks move to top left
+                    } else if(x - px < 0 && y - py > 0){
+                        let x1 = px - 1;
+                        let y1 = py + 1;
+                        while(x1 !== x && y1 !== y){
+                            if(this.isTileOccupied(x1, y1, boardState)){
+                                return false;
+                            }
+                            x1--;
+                            y1++;
+                        }
+                    // checks move to bottom right
+                    }else if(x - px > 0 && y - py < 0){
+                        let x1 = px + 1;
+                        let y1 = py - 1;
+                        while(x1 !== x && y1 !== y){
+                            if(this.isTileOccupied(x1, y1, boardState)){
+                                return false;
+                            }
+                            x1++;
+                            y1--;
+                        }
+                    // checks move to bottom left
+                    }else if(x - px < 0 && y - py < 0){
+                        let x1 = px - 1;
+                        let y1 = py - 1;
+                        while(x1 !== x && y1 !== y){
+                            if(this.isTileOccupied(x1, y1, boardState)){
+                                return false;
+                            }
+                            x1--;
+                            y1--;
+                        }
+                    }
                     if(!this.isTileOccupied(x, y, boardState)){
                         return true;
                     }else if(this.tileHasEnemyPiece(x, y, team, boardState)){
