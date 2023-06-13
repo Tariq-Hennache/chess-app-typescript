@@ -45,6 +45,9 @@ class Referee{
 
     
 
+
+    
+
     isValidMove(px:number, py:number, x:number, y:number, type:PieceType, team:Team, boardState:Piece[]){
         if(type === PieceType.PAWN){
             const startRow = team === Team.WHITE ? 1 : 6;
@@ -177,8 +180,100 @@ class Referee{
         return true;
     }
 
-        }
+        }else if (type === PieceType.QUEEN){
+            if(Math.abs(x - px) === Math.abs(y - py)){
+                // checks move to top right
+                if(x - px > 0 && y - py > 0){
+                    let x1 = px + 1;
+                    let y1 = py + 1;
+                    while(x1 !== x && y1 !== y){
+                        if(this.isTileOccupied(x1, y1, boardState)){
+                            return false;
+                        }
+                        x1++;
+                        y1++;
+                    }
+                // checks move to top left
+                } else if(x - px < 0 && y - py > 0){
+                    let x1 = px - 1;
+                    let y1 = py + 1;
+                    while(x1 !== x && y1 !== y){
+                        if(this.isTileOccupied(x1, y1, boardState)){
+                            return false;
+                        }
+                        x1--;
+                        y1++;
+                    }
+                // checks move to bottom right
+                }else if(x - px > 0 && y - py < 0){
+                    let x1 = px + 1;
+                    let y1 = py - 1;
+                    while(x1 !== x && y1 !== y){
+                        if(this.isTileOccupied(x1, y1, boardState)){
+                            return false;
+                        }
+                        x1++;
+                        y1--;
+                    }
+                // checks move to bottom left
+                }else if(x - px < 0 && y - py < 0){
+                    let x1 = px - 1;
+                    let y1 = py - 1;
+                    while(x1 !== x && y1 !== y){
+                        if(this.isTileOccupied(x1, y1, boardState)){
+                            return false;
+                        }
+                        x1--;
+                        y1--;
+                    }
+                }
+                
+            }else if(x === px){
+                if(y > py){
+                    let y1 = py + 1;
+                    while(y1 !== y){
+                        if(this.isTileOccupied(x, y1, boardState)){
+                            return false;
+                        }
+                        y1++;
+                    }
+                }else if(y < py){
+                    let y1 = py - 1;
+                    while(y1 !== y){
+                        if(this.isTileOccupied(x, y1, boardState)){
+                            return false;
+                        }
+                        y1--;
+                    }
+                }
+            }else if(y === py){
+                if(x > px){
+                    let x1 = px + 1;
+                    while(x1 !== x){
+                        if(this.isTileOccupied(x1, y, boardState)){
+                            return false;
+                        }
+                        x1++;
+                    }
+                }else if(x < px){
+                    let x1 = px - 1;
+                    while(x1 !== x){
+                        if(this.isTileOccupied(x1, y, boardState)){
+                            return false;
+                        }
+                        x1--;
+                    }
+                }
+            }if(!this.isTileOccupied(x, y, boardState)){
+                return true;
+            }else if(this.tileHasEnemyPiece(x, y, team, boardState)){
+                return true;
+            }
+
+       
+
     }
+
 }
 
 
