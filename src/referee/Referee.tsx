@@ -270,7 +270,15 @@ class Referee{
                 return true;
             }
 
-       
+        }else if(type === PieceType.KING){
+            if(Math.abs(x - px) <= 1 && Math.abs(y - py) <= 1){
+                if(!this.isTileOccupied(x, y, boardState)){
+                    return true;
+                }else if(this.tileHasEnemyPiece(x, y, team, boardState)){
+                    return true;
+                }
+            }
+        }
 
     }
 
