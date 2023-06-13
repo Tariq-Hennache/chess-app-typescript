@@ -44,14 +44,14 @@ export const initialBoardState: Piece[] = [
     {image : `assets/images/Chess_rlt60.png`, position :{ x:0, y:0}, type: PieceType.ROOK, team: Team.WHITE},
 
     {image : `assets/images/Chess_ndt60.png`, position :{x:1, y:7}, type: PieceType.KNIGHT, team: Team.BLACK},
-    {image : `assets/images/Chess_nlt60.png`, position :{x:5, y:0}, type: PieceType.KNIGHT, team: Team.WHITE},
-    {image : `assets/images/Chess_ndt60.png`, position :{x:5, y:7}, type: PieceType.KNIGHT, team: Team.BLACK},
+    {image : `assets/images/Chess_nlt60.png`, position :{x:6, y:0}, type: PieceType.KNIGHT, team: Team.WHITE},
+    {image : `assets/images/Chess_ndt60.png`, position :{x:6, y:7}, type: PieceType.KNIGHT, team: Team.BLACK},
     {image : `assets/images/Chess_nlt60.png`, position :{x:1, y:0}, type: PieceType.KNIGHT, team: Team.WHITE},
 
     {image : `assets/images/Chess_bdt60.png`, position :{x:2, y:7}, type: PieceType.BISHOP, team: Team.BLACK},
-    {image : `assets/images/Chess_blt60.png`, position :{x:6, y:0}, type: PieceType.BISHOP, team: Team.WHITE},
-    {image : `assets/images/Chess_bdt60.png`, position :{x:6, y:7}, type: PieceType.BISHOP, team: Team.BLACK},
-    {image : `assets/images/Chess_blt60.png`, position :{x:2, y:0}, type: PieceType.BISHOP, team: Team.WHITE},
+    {image : `assets/images/Chess_blt60.png`, position :{x:5, y:0}, type: PieceType.BISHOP, team: Team.WHITE},
+    {image : `assets/images/Chess_bdt60.png`, position :{x:5, y:7}, type: PieceType.BISHOP, team: Team.BLACK},
+    {image : `assets/images/Chess_blt60.png`, position :{x:2, y:0}, type: PieceType.BISHOP, team: Team.WHITE}, //
 
     {image : `assets/images/Chess_qdt60.png`, position :{x:3, y:7}, type: PieceType.QUEEN, team: Team.BLACK},
     {image : `assets/images/Chess_qlt60.png`, position :{x:3, y:0}, type: PieceType.QUEEN, team: Team.WHITE},
