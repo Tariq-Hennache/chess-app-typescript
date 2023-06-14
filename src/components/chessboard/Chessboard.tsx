@@ -105,6 +105,7 @@ function dropPiece(e : React.MouseEvent){
                         piece.position.x = x;
                         piece.position.y = y;
                         results.push(piece)
+                        
                     }else if(!(piece.position.x === x && piece.position.y === y)){
                         if(piece.type === PieceType.PAWN){
                             piece.enPassant = false;
