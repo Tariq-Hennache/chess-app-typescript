@@ -155,7 +155,11 @@ class Referee{
                     }
                     y1--;
                 }
-            }
+            }if(!this.isTileOccupied(x, y, boardState)){
+                return true;
+                }else if(this.tileHasEnemyPiece(x, y, team, boardState)){
+                return true;
+                }
         }else if(y === py){
             if(x > px){
                 let x1 = px + 1;
@@ -173,17 +177,61 @@ class Referee{
                     }
                     x1--;
                 }
-            }
-        }
+            }if(!this.isTileOccupied(x, y, boardState)){
+                return true;
+                }else if(this.tileHasEnemyPiece(x, y, team, boardState)){
+                return true;
+                }
 
-if(!this.isTileOccupied(x, y, boardState)){
-return true;
-}else if(this.tileHasEnemyPiece(x, y, team, boardState)){
-return true;
-}}
+        }}
 
     isValidQueenMove(px:number, py:number, x:number, y:number, team:Team, boardState:Piece[]){
-        if(Math.abs(x - px) === Math.abs(y - py)){
+        if(x === px){
+            if(y > py){
+                let y1 = py + 1;
+                while(y1 !== y){
+                    if(this.isTileOccupied(x, y1, boardState)){
+                        return false;
+                    }
+                    y1++;
+                }
+            }else if(y < py){
+                let y1 = py - 1;
+                while(y1 !== y){
+                    if(this.isTileOccupied(x, y1, boardState)){
+                        return false;
+                    }
+                    y1--;
+                }
+            }if(!this.isTileOccupied(x, y, boardState)){
+                return true;
+                }else if(this.tileHasEnemyPiece(x, y, team, boardState)){
+                return true;
+                }
+        }else if(y === py){
+            if(x > px){
+                let x1 = px + 1;
+                while(x1 !== x){
+                    if(this.isTileOccupied(x1, y, boardState)){
+                        return false;
+                    }
+                    x1++;
+                }
+            }else if(x < px){
+                let x1 = px - 1;
+                while(x1 !== x){
+                    if(this.isTileOccupied(x1, y, boardState)){
+                        return false;
+                    }
+                    x1--;
+                }
+            }if(!this.isTileOccupied(x, y, boardState)){
+                return true;
+                }else if(this.tileHasEnemyPiece(x, y, team, boardState)){
+                return true;
+                }
+
+        } if(Math.abs(x - px) === Math.abs(y - py)){
             // checks move to top right
             if(x - px > 0 && y - py > 0){
                 let x1 = px + 1;
@@ -229,48 +277,13 @@ return true;
                     y1--;
                 }
             }
-            
-        }else if(x === px){
-            if(y > py){
-                let y1 = py + 1;
-                while(y1 !== y){
-                    if(this.isTileOccupied(x, y1, boardState)){
-                        return false;
-                    }
-                    y1++;
-                }
-            }else if(y < py){
-                let y1 = py - 1;
-                while(y1 !== y){
-                    if(this.isTileOccupied(x, y1, boardState)){
-                        return false;
-                    }
-                    y1--;
-                }
+            if(!this.isTileOccupied(x, y, boardState)){
+                return true;
+            }else if(this.tileHasEnemyPiece(x, y, team, boardState)){
+                return true;
             }
-        }else if(y === py){
-            if(x > px){
-                let x1 = px + 1;
-                while(x1 !== x){
-                    if(this.isTileOccupied(x1, y, boardState)){
-                        return false;
-                    }
-                    x1++;
-                }
-            }else if(x < px){
-                let x1 = px - 1;
-                while(x1 !== x){
-                    if(this.isTileOccupied(x1, y, boardState)){
-                        return false;
-                    }
-                    x1--;
-                }
-            }
-        }if(!this.isTileOccupied(x, y, boardState)){
-            return true;
-        }else if(this.tileHasEnemyPiece(x, y, team, boardState)){
-            return true;
-        }}
+        }
+        }
 
     isValidKingMove(px:number, py:number, x:number, y:number, team:Team, boardState:Piece[]){
         if(Math.abs(x - px) <= 1 && Math.abs(y - py) <= 1){
@@ -293,20 +306,20 @@ return true;
         switch(type){
             case PieceType.PAWN:
                 return this.isValidPawnMove(px, py, x, y, team, boardState);
-                break;
+                
             case PieceType.KNIGHT:
                 return this.isValidKnightMove(px, py, x, y, team, boardState);
-                break;
+                
             case PieceType.BISHOP:
                 return this.isValidBishopMove(px, py, x, y, team, boardState);
-                break;
+                
             case PieceType.ROOK:
                 return this.isValidRookMove(px, py, x, y, team, boardState);
-                break;
+                
             case PieceType.QUEEN:
                 return this.isValidQueenMove(px, py, x, y, team, boardState);
                 //return this.isValidRookMove(px, py, x, y, team, boardState) || this.isValidBishopMove(px, py, x, y, team, boardState);
-                break;
+                
             case PieceType.KING:
                 return this.isValidKingMove(px, py, x, y, team, boardState);
         }
